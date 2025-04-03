@@ -19,7 +19,7 @@ interface IProfileProps {
 }
 
 export default function Profile({ user }: IProfileProps) {
-    const { data: weights, isLoading, addWeight, updateWeight } = useWeights(user.id);
+    const { data: weights, isLoading, addWeight } = useWeights(user.id);
     const [openAddWeightDialog, setOpenAddWeightDialog] = useState(false);
     const [firstWeight, setFirstWeight] = useState(true);
 
