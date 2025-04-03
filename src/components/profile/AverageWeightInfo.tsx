@@ -6,23 +6,55 @@ interface AverageWeightInfoProps {
 
 export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
 
-    // Calculate the last 7 days' average (this week)
-    const thisWeekAverage: string = weights && weights.length > 0
-        ? (weights.slice(-7).reduce((acc, weight) => acc + weight.weight, 0) / weights.slice(-7).length).toFixed(1)
-        : "0.0";
+    const getStartOfWeek = (date: Date, weekStartDay: number = 1): Date => {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = (day < weekStartDay ? 7 : 0) + day - weekStartDay;
+        d.setDate(d.getDate() - diff);
+        d.setHours(0, 0, 0, 0); // Ensure the time is set to the start of the day
+        return d;
+    };
 
-    // Calculate the previous 7 days' average (last week)
-    const lastWeekAverage: string = weights?.slice(-14, -7).length === 7
-        ? (weights.slice(-14, -7).reduce((acc, weight) => acc + weight.weight, 0) / 7).toFixed(1)
-        : "0.0";
+    const calculateWeeklyAverage = (weights: Weight[] | null) => {
+        if (!weights || weights.length === 0) return { thisWeek: "0.0", lastWeek: "0.0" };
+
+        // Convert string dates to Date objects
+        const weightEntries = weights.map(w => ({ ...w, date: new Date(w.date) })).reverse();
+
+        // Find the start of this and last week
+        const today = new Date();
+        const thisWeekStart = getStartOfWeek(today, 1); // Always start the week on Monday
+        const lastWeekStart = new Date(thisWeekStart);
+        lastWeekStart.setDate(thisWeekStart.getDate() - 7);
+
+        const thisWeekEnd = new Date(thisWeekStart);
+        thisWeekEnd.setDate(thisWeekStart.getDate() + 6); // This week's last day
+
+        // Filter weights properly into the correct week
+        const thisWeekWeights = weightEntries.filter(w => w.date >= thisWeekStart && w.date <= thisWeekEnd);
+        const lastWeekWeights = weightEntries.filter(w => w.date >= lastWeekStart && w.date < thisWeekStart);
+
+        console.log("This week weights:", thisWeekWeights);
+
+        // Calculate averages
+        const average = (data: { weight: number }[]) =>
+            data.length > 0 ? (data.reduce((acc, w) => acc + w.weight, 0) / data.length).toFixed(2) : "0.0";
+
+        return {
+            thisWeek: average(thisWeekWeights),
+            lastWeek: average(lastWeekWeights)
+        };
+    };
+
+    const { thisWeek, lastWeek } = calculateWeeklyAverage(weights);
 
     // Difference
-    const difference: string = thisWeekAverage !== "0.0" && lastWeekAverage !== "0.0"
-        ? (parseFloat(thisWeekAverage) - parseFloat(lastWeekAverage)).toFixed(1)
+    const difference: string = thisWeek !== "0.0" && lastWeek !== "0.0"
+        ? (parseFloat(thisWeek) - parseFloat(lastWeek)).toFixed(2)
         : "0.0";
 
     function handleArrow(difference: string) {
-        if(weights !== null && weights.length >= 14) {
+        if (weights !== null && weights.length >= 7) {
             if (parseFloat(difference) > 0) {
                 return <img src="/arrows/green-up.png" alt="arrow-up" className="w-4 h-4 mt-0.5"/>;
             } else {
@@ -35,20 +67,20 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
         <div className="flex justify-content-center text-sm gap-3.5 mt-5">
             <div className="flex flex-col gap-1">
                 <h1 className="font-bold text-[#4B00FB]">Last week average</h1>
-                <h1 className="font-light text-center">{lastWeekAverage !== "0.0" ? `${lastWeekAverage} KG` : "No enough data"}</h1>
+                <h1 className="font-light text-center">{lastWeek !== "0.0" ? `${lastWeek} KG` : "No enough data"}</h1>
             </div>
             <div className="flex flex-col gap-1">
                 <div>
                     <h1 className="font-bold text-[transparent]">Thi</h1>
                 </div>
                 <div className="flex flex-row gap-1">
-                    {weights? handleArrow(difference) : ""}
+                    {weights ? handleArrow(difference) : ""}
                     <h1 className="font-bold">{difference !== "0.0" ? `${difference} KG` : "No data"}</h1>
                 </div>
             </div>
             <div className="flex flex-col gap-1">
                 <h1 className="font-bold text-[#4B00FB]">This week average</h1>
-                <h1 className="font-light text-center">{thisWeekAverage !== "0.0" ? `${thisWeekAverage} KG` : "No data"}</h1>
+                <h1 className="font-light text-center">{thisWeek !== "0.0" ? `${thisWeek} KG` : "No data"}</h1>
             </div>
         </div>
     );

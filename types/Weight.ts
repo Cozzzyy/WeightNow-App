@@ -4,6 +4,6 @@ export type Weight = {
     id: string;
     weight: number;
     date: Date | string;
-    profile_id: string;
+    profile_id?: string;
     timestamp: number;
 }

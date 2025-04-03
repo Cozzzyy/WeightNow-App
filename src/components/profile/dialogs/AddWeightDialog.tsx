@@ -17,7 +17,7 @@ interface AddWeightDialogProps {
     handleCloseDialogAction: () => void;
     open: boolean;
     addWeightAction?: (weight: number, date: Date) => void;
-    editWeightAction?: (weight: { weight: number; date: Date }) => void;
+    editWeightAction?: (weight : Weight) => void;
     deleteWeightAction?: (id: string) => void;
     editMode?: boolean;
     selectedWeight?: Weight | null;
@@ -93,7 +93,13 @@ export function AddWeightDialog({
         }
 
         if (editMode && editWeightAction) {
-            editWeightAction({weight: parsedWeight, date});
+            const updatedWeight: Weight = {
+                id: selectedWeight!.id,
+                weight: parsedWeight,
+                date: date,
+                timestamp: Date.now(),
+            }
+            editWeightAction(updatedWeight);
         } else if (addWeightAction) {
             addWeightAction(parsedWeight, date);
         }

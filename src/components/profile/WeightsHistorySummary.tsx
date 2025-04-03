@@ -1,12 +1,12 @@
 import {Weight} from "../../../types/Weight";
 import {usePathname} from 'next/navigation';
-import {startTransition, useCallback, useMemo, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import {AddWeightDialog} from "@/components/profile/dialogs/AddWeightDialog";
 import Link from "next/link";
 
 interface IWeightsHistorySummaryProps {
     weights: Weight[];
-    handleUpdateWeightAction?: (weight: { weight: number; date: Date }) => void;
+    handleUpdateWeightAction?: (weight: Weight) => void;
     deleteWeightAction?: (id: string) => void;
 }
 
@@ -104,10 +104,8 @@ export function WeightsHistorySummary({
 
     function handleCloseDialog() {
         if (currentPath === "/history") {
-            startTransition(() => {
                 setEditMode(false);
                 setSelectedWeightIndex(null);
-            });
         }
     }
 

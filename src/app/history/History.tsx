@@ -46,7 +46,7 @@ export function History({ user }: IHistoryProps) {
         return b.timestamp - a.timestamp; // Reverse the comparison for timestamps if dates are the same
     });
 
-    function handleUpdateWeightAction(weight: { weight: number; date: Date }) {
+    function handleUpdateWeightAction(weight : Weight) {
         updateWeight(weight);
     }
 

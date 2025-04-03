@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "WeightNow",
-  description: "Stat weight now",
+  description: "Start tracking your weight now",
 };
 
 export default function RootLayout({
