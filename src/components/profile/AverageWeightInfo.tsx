@@ -22,7 +22,7 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
         : "0.0";
 
     function handleArrow(difference: string) {
-        if(weights !== null && weights.length > 14) {
+        if(weights !== null && weights.length >= 14) {
             if (parseFloat(difference) > 0) {
                 return <img src="/arrows/green-up.png" alt="arrow-up" className="w-4 h-4 mt-0.5"/>;
             } else {

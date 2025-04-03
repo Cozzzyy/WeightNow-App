@@ -14,19 +14,22 @@ import { useState } from "react";
 import { DatePicker } from "@/components/date/DatePicker";
 
 interface AddWeightDialogProps {
-    handleCloseDialog: () => void;
+    handleCloseDialogAction: () => void;
     open: boolean;
-    addWeight: (weight: number, date: Date) => void;
+    addWeightAction: (weight: number, date: Date) => void;
     lastWeight: number;
+    firstWeight: boolean;
 }
 
-export function AddWeightDialog({ handleCloseDialog, open, addWeight, lastWeight }: AddWeightDialogProps) {
+export function AddWeightDialog({ handleCloseDialogAction, open, addWeightAction, lastWeight, firstWeight }: AddWeightDialogProps) {
     const [weight, setWeight] = useState(lastWeight);
     const [date, setDate] = useState(new Date());
 
     function handleDateChange(date: Date) {
         setDate(date);
     }
+
+
 
     function checkWeight() {
         if (weight < 0) {
@@ -44,22 +47,22 @@ export function AddWeightDialog({ handleCloseDialog, open, addWeight, lastWeight
 
     function handleAddWeight() {
         checkWeight();
-        addWeight(weight, date);
-        handleCloseDialog();
+        addWeightAction(weight, date);
+        handleCloseDialogAction();
     }
 
     return (
         <Dialog
             open={open}
             onOpenChange={(open) => {
-                if (!open) handleCloseDialog();
+                if (!open) handleCloseDialogAction();
             }}
         >
             <DialogContent className="sm:max-w-[425px] border-none">
                 <DialogHeader>
                     <DialogTitle>Add Weight</DialogTitle>
                     <DialogDescription>
-                        You can add here your new weight. Press the button below to save it.
+                        {firstWeight ? "Hey, looks like you didn't add any weights yet. Select a weight and press the button below to save it! " : "Add your new weight, press the button below to save it!"}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-center items-center flex-col gap-3">
@@ -67,16 +70,20 @@ export function AddWeightDialog({ handleCloseDialog, open, addWeight, lastWeight
                         <Input
                             type="number"
                             step="0.1"
-                            min="0"
-                            className="text-center text-6xl h-20 w-32 p-0 border-none  bg-transparent"
+                            min="0.0"
+                            className="text-center text-6xl h-20 w-32 p-0 border-none bg-transparent"
                             style={{
                                 caretColor: '#4B00FB',
                                 WebkitAppearance: 'none',
                                 MozAppearance: 'textfield'
                             }}
-                            onChange={(e) => setWeight(parseFloat(e.target.value))}
+                            onChange={(e) => {
+                                const sanitizedValue = e.target.value.replace(",", "."); // Replace comma with dot
+                                setWeight(parseFloat(sanitizedValue) || 0); // Ensure NaN is handled
+                            }}
                             defaultValue={lastWeight}
                         />
+
                         <span className="text-3xl text-muted-foreground">KG</span>
                     </div>
                     <DatePicker handleDateAction={handleDateChange} />

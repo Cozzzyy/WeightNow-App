@@ -120,9 +120,8 @@ export function Graph({ name, weights }: GraphProps) {
     const average = lastSevenDays.reduce((acc, curr) => acc + curr.weight, 0) / lastSevenDays.length;
 
     const yAxisTicks = generateSmartTicks(minWeight - 0.5, maxWeight + 0.5);
-    const firstDate = formatDate(new Date(lastSevenDays[0]?.date));
-    const lastDate = formatDate(new Date(lastSevenDays[lastSevenDays.length - 1]?.date));
-
+    const firstDate = lastSevenDays[0] ? formatDate(new Date(lastSevenDays[0].date)) : "N/A";
+    const lastDate = lastSevenDays[lastSevenDays.length - 1] ? formatDate(new Date(lastSevenDays[lastSevenDays.length - 1].date)) : "N/A";
     return (
         <Card className="bg-transparent text-white border-none">
             <CardHeader>

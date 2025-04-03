@@ -9,7 +9,7 @@ import {useWeights} from "@/hooks/useWeights";
 import {Loading} from "@/components/Loading";
 import {AddWeightButton} from "@/components/buttons/AddWeightButton";
 import {AddWeightDialog} from "@/components/profile/dialogs/AddWeightDialog";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {WeightsHistorySummary} from "@/components/profile/WeightsHistorySummary";
 
 
@@ -20,6 +20,17 @@ interface IProfileProps {
 export default function Profile({ user }: IProfileProps) {
     const { data: weights, isLoading, addWeight } = useWeights(user.id);
     const [openAddWeightDialog, setOpenAddWeightDialog] = useState(false);
+    const [firstWeight, setFirstWeight] = useState(true);
+
+
+    useEffect(() => {
+        if(weights && weights.length === 0) {
+            setOpenAddWeightDialog(true);
+        }
+        if(weights && weights.length > 0) {
+            setFirstWeight(false);
+        }
+    }, [weights]);
 
     if (isLoading) {
         return <Loading />;
@@ -43,9 +54,6 @@ export default function Profile({ user }: IProfileProps) {
         }
         return b.timestamp - a.timestamp; // Reverse the comparison for timestamps if dates are the same
     });
-
-    console.log(sortedWeights);
-
 
     // Get the last weight (if available)
     const lastWeight: Weight | null = sortedWeights.length ? sortedWeights[sortedWeights.length - 1] : null;
@@ -76,10 +84,11 @@ export default function Profile({ user }: IProfileProps) {
             <WeightsHistorySummary weights={sortedWeights} />
             <AddWeightButton handleOpenDialog={handleOpenDialog} />
             <AddWeightDialog
-                handleCloseDialog={handleCloseDialog}
+                handleCloseDialogAction={handleCloseDialog}
                 open={openAddWeightDialog}
-                addWeight={handleAddWeight}
-                lastWeight={lastWeight ? lastWeight.weight : 0}
+                addWeightAction={handleAddWeight}
+                lastWeight={lastWeight ? lastWeight.weight : 0.0}
+                firstWeight={firstWeight}
             />
         </div>
     );

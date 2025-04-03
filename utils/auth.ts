@@ -80,15 +80,6 @@ export const auth = {
         });
         if (error) throw error;
 
-        if (data.user) {
-            try {
-                await users.captureUserDetails(data.user);
-            } catch (profileError) {
-                console.error('Error capturing user details:', profileError);
-            }
-
-        }
-
         return data;
     },
 

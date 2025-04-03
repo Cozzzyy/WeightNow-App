@@ -21,6 +21,11 @@ export function WeightsHistorySummary({weights}: IWeightsHistorySummaryProps) {
     }
 
     function handleArrow(difference: string) {
+
+        if( parseFloat(difference) === 0) {
+            return null;
+        }
+
         if (parseFloat(difference) > 0) {
             return <img src="/arrows/green-up.png" alt="arrow-up" className="w-4 h-4 mt-0.5"/>;
         } else {
@@ -62,12 +67,17 @@ export function WeightsHistorySummary({weights}: IWeightsHistorySummaryProps) {
                     </div>
                     <div className="flex flex-col justify-center items-center">
                         <div className="flex flex-row justify-center items-center">
-                            {handleArrow(calculateDifference(weight.weight, last5Weights[index + 1]?.weight || weight.weight))}
-                            <h1 className="">
-                                {index < last5Weights.length - 1
-                                    ? parseFloat(calculateDifference(weight.weight, last5Weights[index + 1].weight)).toFixed(1)
-                                    : 0.0} KG
-                            </h1>
+                            {weights.length > 1 ?
+                                <>
+                                    {handleArrow(calculateDifference(weight.weight, last5Weights[index + 1]?.weight || weight.weight))}
+                                    <h1 className="">
+                                        {index < last5Weights.length - 1
+                                            ? parseFloat(calculateDifference(weight.weight, last5Weights[index + 1].weight)).toFixed(1)
+                                            : 0.0} KG
+                                    </h1>
+                                </>
+                                : null
+                            }
                         </div>
                     </div>
                     <div className="flex flex-col justify-center align-middle">
