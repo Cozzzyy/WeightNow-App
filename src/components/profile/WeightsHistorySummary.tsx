@@ -1,8 +1,8 @@
 import {Weight} from "../../../types/Weight";
-import {useRouter} from 'next/navigation';
 import {usePathname} from 'next/navigation';
-import {useState} from "react";
+import {startTransition, useCallback, useMemo, useState} from "react";
 import {AddWeightDialog} from "@/components/profile/dialogs/AddWeightDialog";
+import Link from "next/link";
 
 interface IWeightsHistorySummaryProps {
     weights: Weight[];
@@ -15,12 +15,16 @@ export function WeightsHistorySummary({
                                           handleUpdateWeightAction,
                                           deleteWeightAction
                                       }: IWeightsHistorySummaryProps) {
-    const router = useRouter();
     const currentPath = usePathname();
     const [selectedWeightIndex, setSelectedWeightIndex] = useState<number | null>(null); // Track selected weight index
     const [editMode, setEditMode] = useState(false); // Track edit mode
-    const last5Weights: Weight[] = (weights.length > 3 && currentPath === "/profile") ? weights.slice(0, 5) : weights;
-    const last4Weights: Weight[] = (weights.length > 3 && currentPath === "/profile") ? weights.slice(0, 4) : weights;
+    const last5Weights = useMemo(() => {
+        return weights.length > 3 && currentPath === "/profile" ? weights.slice(0, 5) : weights;
+    }, [weights, currentPath]);
+
+    const last4Weights = useMemo(() => {
+        return weights.length > 3 && currentPath === "/profile" ? weights.slice(0, 4) : weights;
+    }, [weights, currentPath]);
 
     function convertTimestampToMinutesAndHours(timestamp: number) {
         const date = new Date(timestamp);
@@ -56,17 +60,15 @@ export function WeightsHistorySummary({
         }
     }
 
-    function handleNavigateToHistory() {
-        router.push("/history");
-    }
-
     function showSeeAllButton() {
         if (currentPath === "/history") {
             return null;
         }
 
         return (
-            <div className="text-[#4B00FB] text-[13px]" onClick={handleNavigateToHistory}>See all</div>
+            <Link href={"/history"} prefetch>
+                <h1 className="text-[#4B00FB] text-[13px] mr-2">See all</h1>
+            </Link>
         );
     }
 
@@ -87,12 +89,12 @@ export function WeightsHistorySummary({
         );
     }
 
-    function handleEditWeight(index: number) {
+    const handleEditWeight = useCallback((index: number) => {
         if (currentPath === "/history") {
-            setEditMode(true); // Set edit mode
-            setSelectedWeightIndex(index); // Set the selected index
+            setEditMode(true);
+            setSelectedWeightIndex(index);
         }
-    }
+    }, [currentPath]);
 
     function handleDeleteWeightAction(id: string) {
         if (deleteWeightAction) {
@@ -102,8 +104,10 @@ export function WeightsHistorySummary({
 
     function handleCloseDialog() {
         if (currentPath === "/history") {
-            setSelectedWeightIndex(null); // Close the dialog
-            setEditMode(false); // Reset edit mode
+            startTransition(() => {
+                setEditMode(false);
+                setSelectedWeightIndex(null);
+            });
         }
     }
 
