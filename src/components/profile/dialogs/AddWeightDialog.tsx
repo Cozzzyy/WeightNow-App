@@ -24,29 +24,46 @@ interface AddWeightDialogProps {
 export function AddWeightDialog({ handleCloseDialogAction, open, addWeightAction, lastWeight, firstWeight }: AddWeightDialogProps) {
     const [weight, setWeight] = useState(lastWeight);
     const [date, setDate] = useState(new Date());
+    const [error, setError] = useState<string | null>(null);
 
     function handleDateChange(date: Date) {
         setDate(date);
     }
 
+    function validateWeight(e: string): void {
+        const inputValue = e.replace(",", "."); // Replace comma with dot
+        const parsedValue = parseFloat(inputValue);
 
-
-    function checkWeight() {
-        if (weight < 0) {
-            setWeight(0);
+        if (isNaN(parsedValue)) {
+            setError("Invalid number format.");
+            return;
         }
 
-        if (weight > 300) {
-            setWeight(0);
+        if (parsedValue < 0) {
+            setError("Weight cannot be negative.");
+            return;
+        }
+        if (parsedValue > 300) {
+            setError("Weight cannot exceed 300kg.");
+            return;
         }
 
-        if (isNaN(weight)) {
-            setWeight(0);
+        // Ensure max 1 decimal place
+        if (!/^\d{1,3}(\.\d{1})?$/.test(parsedValue.toString())) {
+            setError("Weight must have at most one decimal place.");
+            return;
         }
+
+        setError(null);
+        setWeight(parsedValue);
     }
 
     function handleAddWeight() {
-        checkWeight();
+
+        if (error) {
+            return;
+        }
+
         addWeightAction(weight, date);
         handleCloseDialogAction();
     }
@@ -77,10 +94,7 @@ export function AddWeightDialog({ handleCloseDialogAction, open, addWeightAction
                                 WebkitAppearance: 'none',
                                 MozAppearance: 'textfield'
                             }}
-                            onChange={(e) => {
-                                const sanitizedValue = e.target.value.replace(",", "."); // Replace comma with dot
-                                setWeight(parseFloat(sanitizedValue) || 0); // Ensure NaN is handled
-                            }}
+                            onChange={(e) => validateWeight(e.target.value)}
                             defaultValue={lastWeight}
                         />
 
@@ -96,6 +110,9 @@ export function AddWeightDialog({ handleCloseDialogAction, open, addWeightAction
                             boxShadow: '-2px 4px 7.3px 6px rgba(0, 0, 0, 0.15)'
                         }}
                         onClick={handleAddWeight} type="submit">Add your new weight</Button>
+                    {error && (
+                        <p className="text-red-500 text-center text-sm mt-2">{error}</p> // Show error message
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>
