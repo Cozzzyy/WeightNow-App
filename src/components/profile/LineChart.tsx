@@ -82,8 +82,8 @@ export function Graph({ name, weights }: GraphProps) {
                             data={[]}
                             margin={{
                                 top: 30,
-                                right: 18,
-                                left: 2,
+                                right: 12,
+                                left: 10,
                                 bottom: 0,
                             }}
                         >
@@ -108,12 +108,9 @@ export function Graph({ name, weights }: GraphProps) {
             </Card>
         );
     }
-    console.log(weights);
 
     // Get last 7 days of weights starting from the last weight
     const lastSevenDays = weights.slice(0, 7).reverse();
-
-    console.log(lastSevenDays);
 
     const minWeight = Math.min(...lastSevenDays.map(data => data.weight));
     const maxWeight = Math.max(...lastSevenDays.map(data => data.weight));
@@ -135,8 +132,8 @@ export function Graph({ name, weights }: GraphProps) {
                         data={lastSevenDays}
                         margin={{
                             top: 30,
-                            right: 18,
-                            left: 2,
+                            right: 25,
+                            left: 8,
                             bottom: 0,
                         }}
                     >

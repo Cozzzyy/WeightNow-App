@@ -31,4 +31,32 @@ export const weights = {
 
         return data as Weight; // Ensure this matches your expected return type (Weight)
     },
+
+    async updateWeight(weight: Partial<Weight>) {
+        const { data, error } = await supabase
+            .from('weights')
+            .update(weight)
+            .eq('id', weight.id)
+            .select()
+            .single();
+
+        if (error) {
+            throw error; // Ensure errors are thrown correctly to be handled by React Query
+        }
+
+        return data as Weight; // Ensure this matches your expected return type (Weight)
+    },
+
+    async deleteWeight(id: string) {
+        const { error } = await supabase
+            .from('weights')
+            .delete()
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) {
+            throw error; // Ensure errors are thrown correctly to be handled by React Query
+        }
+    }
 }

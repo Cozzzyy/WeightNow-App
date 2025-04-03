@@ -13,12 +13,13 @@ import {useEffect, useState} from "react";
 import {WeightsHistorySummary} from "@/components/profile/WeightsHistorySummary";
 
 
+
 interface IProfileProps {
     user: ProfileType;
 }
 
 export default function Profile({ user }: IProfileProps) {
-    const { data: weights, isLoading, addWeight } = useWeights(user.id);
+    const { data: weights, isLoading, addWeight, updateWeight } = useWeights(user.id);
     const [openAddWeightDialog, setOpenAddWeightDialog] = useState(false);
     const [firstWeight, setFirstWeight] = useState(true);
 
@@ -66,6 +67,7 @@ export default function Profile({ user }: IProfileProps) {
         setOpenAddWeightDialog(false);
     }
 
+
     function handleAddWeight(weight: number, date: Date) {
         const newWeight: WeightCreate = {
             weight,
@@ -75,6 +77,7 @@ export default function Profile({ user }: IProfileProps) {
         };
         addWeight(newWeight);
     }
+
 
     return (
         <div className="flex items-center justify-center flex-col pl-4 pr-4 overflow-hidden">
@@ -87,7 +90,7 @@ export default function Profile({ user }: IProfileProps) {
                 handleCloseDialogAction={handleCloseDialog}
                 open={openAddWeightDialog}
                 addWeightAction={handleAddWeight}
-                lastWeight={lastWeight ? lastWeight.weight : 0.0}
+                selectedWeight={lastWeight}
                 firstWeight={firstWeight}
             />
         </div>

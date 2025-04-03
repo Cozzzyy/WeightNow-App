@@ -17,8 +17,24 @@ export function useWeights(id: string) {
         }
     });
 
+    const updateWeight = useMutation({
+        mutationFn: (weight: Partial<Weight>) => weights.updateWeight(weight),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['weights', id] });
+        }
+    });
+
+    const deleteWeight = useMutation({
+        mutationFn: (id: string) => weights.deleteWeight(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['weights', id] });
+        }
+    });
+
     return {
         ...query,
-        addWeight: addWeight.mutate
+        addWeight: addWeight.mutate,
+        updateWeight: updateWeight.mutate,
+        deleteWeight: deleteWeight.mutate,
     };
 }
