@@ -31,7 +31,7 @@ export function AddWeightDialog({ handleCloseDialogAction, open, addWeightAction
     }
 
     function validateWeight(e: string): void {
-        const inputValue = e.replace(",", "."); // Replace comma with dot
+        const inputValue = e.replace(",", ".");
         const parsedValue = parseFloat(inputValue);
 
         if (isNaN(parsedValue)) {

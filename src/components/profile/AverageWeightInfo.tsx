@@ -32,7 +32,7 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
     }
 
     return (
-        <div className="flex justify-content-center text-sm gap-5 mt-5">
+        <div className="flex justify-content-center text-sm gap-3.5 mt-5">
             <div className="flex flex-col gap-1">
                 <h1 className="font-bold text-[#4B00FB]">Last week average</h1>
                 <h1 className="font-light text-center">{lastWeekAverage !== "0.0" ? `${lastWeekAverage} KG` : "No enough data"}</h1>
