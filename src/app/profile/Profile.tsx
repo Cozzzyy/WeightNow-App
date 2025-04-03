@@ -79,7 +79,7 @@ export default function Profile({ user }: IProfileProps) {
     return (
         <div className="flex items-center justify-center flex-col pl-4 pr-4 overflow-hidden">
             <Graph name={user.name} weights={sortedWeights} />
-            <DisplayWeight weights={sortedWeights} />
+            <DisplayWeight weights={sortedWeights} handleOpenDialog={handleOpenDialog} />
             <AverageWeightInfo weights={sortedWeights} />
             <WeightsHistorySummary weights={sortedWeights} />
             <AddWeightButton handleOpenDialog={handleOpenDialog} />
