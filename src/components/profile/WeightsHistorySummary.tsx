@@ -6,8 +6,8 @@ import {AddWeightDialog} from "@/components/profile/dialogs/AddWeightDialog";
 
 interface IWeightsHistorySummaryProps {
     weights: Weight[];
-    handleUpdateWeightAction: (weight: { weight: number; date: Date }) => void;
-    deleteWeightAction: (id: string) => void;
+    handleUpdateWeightAction?: (weight: { weight: number; date: Date }) => void;
+    deleteWeightAction?: (id: string) => void;
 }
 
 export function WeightsHistorySummary({
@@ -95,7 +95,9 @@ export function WeightsHistorySummary({
     }
 
     function handleDeleteWeightAction(id: string) {
-        deleteWeightAction(id);
+        if (deleteWeightAction) {
+            deleteWeightAction(id);
+        }
     }
 
     function handleCloseDialog() {
