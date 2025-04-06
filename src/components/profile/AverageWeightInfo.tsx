@@ -1,7 +1,7 @@
 import { Weight } from "../../../types/Weight";
 
 interface AverageWeightInfoProps {
-    weights: Weight[] | null;
+    weights: Weight[] | undefined;
 }
 
 export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {

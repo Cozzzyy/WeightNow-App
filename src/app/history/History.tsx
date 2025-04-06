@@ -27,25 +27,6 @@ export function History({ user }: IHistoryProps) {
         );
     }
 
-    // Ensure weights is always an array
-    const weightsWithDate: Weight[] = weights?.length
-        ? weights.map((weight: Weight) => ({
-            ...weight,
-            date: new Date(weight.date),
-        }))
-        : [];
-
-    // Sort the weights
-    const sortedWeights: Weight[] = weightsWithDate.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        const dateComparison = dateB.getTime() - dateA.getTime(); // Reverse the comparison for dates
-        if (dateComparison !== 0) {
-            return dateComparison;
-        }
-        return b.timestamp - a.timestamp; // Reverse the comparison for timestamps if dates are the same
-    });
-
     function handleUpdateWeightAction(weight : Weight) {
         updateWeight(weight);
     }
@@ -56,7 +37,7 @@ export function History({ user }: IHistoryProps) {
 
     return (
         <div className="flex items-center justify-center flex-col pl-4 pr-4 overflow-hidden">
-            <WeightsHistorySummary weights={sortedWeights} handleUpdateWeightAction={handleUpdateWeightAction} deleteWeightAction={deleteWeightAction} />
+            <WeightsHistorySummary weights={weights} handleUpdateWeightAction={handleUpdateWeightAction} deleteWeightAction={deleteWeightAction} />
             <BackButton/>
         </div>
 

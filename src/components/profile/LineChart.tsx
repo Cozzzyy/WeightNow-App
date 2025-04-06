@@ -26,7 +26,7 @@ const chartConfig = {
 
 interface GraphProps {
     name: string;
-    weights: Weight[] | null;
+    weights: Weight[] | undefined;
 }
 
 // Function to format date as "DD/MM"

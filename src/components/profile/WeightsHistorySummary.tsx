@@ -1,11 +1,11 @@
 import {Weight} from "../../../types/Weight";
 import {usePathname} from 'next/navigation';
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useState} from "react";
 import {AddWeightDialog} from "@/components/profile/dialogs/AddWeightDialog";
 import Link from "next/link";
 
 interface IWeightsHistorySummaryProps {
-    weights: Weight[];
+    weights: Weight[] | undefined;
     handleUpdateWeightAction?: (weight: Weight) => void;
     deleteWeightAction?: (id: string) => void;
 }
@@ -18,13 +18,27 @@ export function WeightsHistorySummary({
     const currentPath = usePathname();
     const [selectedWeightIndex, setSelectedWeightIndex] = useState<number | null>(null); // Track selected weight index
     const [editMode, setEditMode] = useState(false); // Track edit mode
-    const last5Weights = useMemo(() => {
-        return weights.length > 3 && currentPath === "/profile" ? weights.slice(0, 5) : weights;
-    }, [weights, currentPath]);
 
-    const last4Weights = useMemo(() => {
-        return weights.length > 3 && currentPath === "/profile" ? weights.slice(0, 4) : weights;
-    }, [weights, currentPath]);
+    const handleEditWeight = useCallback((index: number) => {
+        if (currentPath === "/history") {
+            setEditMode(true);
+            setSelectedWeightIndex(index);
+        }
+    }, [currentPath]);
+
+    if (!weights || weights.length === 0) {
+        return (
+            <div className="flex justify-center m-10">
+                <h1 className="text-[#4B00FB] text-center">
+                    No data available, click on Add Weight to start weight tracking
+                </h1>
+            </div>
+        );
+    }
+
+    const last5Weights = weights.length > 3 && currentPath === "/profile" ? weights.slice(0, 5) : weights;
+
+    const last4Weights = weights.length > 3 && currentPath === "/profile" ? weights.slice(0, 4) : weights;
 
     function convertTimestampToMinutesAndHours(timestamp: number) {
         const date = new Date(timestamp);
@@ -48,17 +62,6 @@ export function WeightsHistorySummary({
         }
     }
 
-    function showMissingDataInfo() {
-        if (!weights || weights.length === 0) {
-            return (
-                <div className="flex justify-center m-10">
-                    <h1 className="text-[#4B00FB] text-center">
-                        No data available, click on Add Weight to start weight tracking
-                    </h1>
-                </div>
-            );
-        }
-    }
 
     function showSeeAllButton() {
         if (currentPath === "/history") {
@@ -89,12 +92,6 @@ export function WeightsHistorySummary({
         );
     }
 
-    const handleEditWeight = useCallback((index: number) => {
-        if (currentPath === "/history") {
-            setEditMode(true);
-            setSelectedWeightIndex(index);
-        }
-    }, [currentPath]);
 
     function handleDeleteWeightAction(id: string) {
         if (deleteWeightAction) {
@@ -115,7 +112,6 @@ export function WeightsHistorySummary({
                 {showHistoryTitle()}
                 {showSeeAllButton()}
             </div>
-            {showMissingDataInfo()}
             {last4Weights.map((weight, index) => (
                 <div
                     key={index}

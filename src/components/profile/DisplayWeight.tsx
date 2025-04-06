@@ -1,7 +1,7 @@
 import { Weight } from "../../../types/Weight";
 
 interface DisplayWeightProps {
-    weights: Weight[] | null;
+    weights: Weight[] | undefined;
     handleOpenDialog: () => void;
 }
 
