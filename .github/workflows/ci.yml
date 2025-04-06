@@ -29,6 +29,12 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
+      # Step 5: Supabase injection
+      - name: Inject Supabase env variables
+        run: |
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env.production
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env.production
+
       # Step 6: Build Next.js project
       - name: Build Next.js
         run: npm run build
