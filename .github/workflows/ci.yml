@@ -33,6 +33,9 @@ jobs:
           echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env.production
           echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env.production
 
+      # Step 3.2: Create .env.development file
+      - name: Debug env file
+        run: cat .env.production | grep SUPABASE
 
       # Step 4: Lint code
       - name: Run Lint
