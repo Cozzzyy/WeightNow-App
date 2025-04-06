@@ -53,9 +53,8 @@ jobs:
       - name: Deploy to Vercel
         if: github.ref == 'refs/heads/main'
         run: |
-          npx vercel deploy --prod --yes \
+          npx vercel deploy --prod \
             --token=$VERCEL_TOKEN \
-            --project-id=$VERCEL_PROJECT_ID
         env:
           VERCEL_TOKEN: ${{ vars.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
