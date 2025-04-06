@@ -33,7 +33,9 @@ jobs:
           echo "SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}" >> .env.production
           echo "NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}" >> .env.production
           echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}" >> .env.production
-          
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
 
       # Step 3.2: Create .env.development file
       - name: Debug env file
@@ -56,8 +58,6 @@ jobs:
             --org-id=$VERCEL_ORG_ID \
             --project-id=$VERCEL_PROJECT_ID
         env:
-            SUPABASE_URL: ${{ vars.SUPABASE_URL }}
-            SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
-            VERCEL_TOKEN: ${{ vars.VERCEL_TOKEN }}
-            VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
-            VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ vars.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
