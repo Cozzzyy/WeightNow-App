@@ -46,7 +46,7 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
         };
     };
 
-    const { thisWeek, lastWeek } = calculateWeeklyAverage(weights);
+    const { thisWeek, lastWeek } = calculateWeeklyAverage(weights!);
 
     // Difference
     const difference: string = thisWeek !== "0.0" && lastWeek !== "0.0"
@@ -54,7 +54,7 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
         : "0.0";
 
     function handleArrow(difference: string) {
-        if (weights !== null && weights.length >= 7) {
+        if (weights !== null && weights!.length >= 7) {
             if (parseFloat(difference) > 0) {
                 return <img src="/arrows/green-up.png" alt="arrow-up" className="w-4 h-4 mt-0.5"/>;
             } else {
