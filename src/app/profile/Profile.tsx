@@ -21,25 +21,31 @@ interface IProfileProps {
 export default function Profile({ user }: IProfileProps) {
     const { data: weights, isLoading, addWeight } = useWeights(user.id);
     const [openAddWeightDialog, setOpenAddWeightDialog] = useState(false);
-    const [firstWeight, setFirstWeight] = useState(true);
-
 
     useEffect(() => {
-        if(weights && weights.length === 0) {
+        if (!isLoading && (!weights || weights.length === 0)) {
             setOpenAddWeightDialog(true);
         }
-        if(weights && weights.length > 0) {
-            setFirstWeight(false);
-        }
-    }, [weights]);
+    }, [weights, isLoading]);
+
 
     if (isLoading) {
         return <Loading />;
     }
 
+    if(!weights || weights.length === 0) {
+        return (
+            <div className="flex items-center justify-center flex-col pl-4 pr-4 mt-10 overflow-hidden">
+                <h1 className="text-1xl text-center">
+                    No weights found for {user.name}. Please add your first weight!
+                </h1>
+                <AddWeightButton handleOpenDialog={handleOpenDialog} />
+                <AddWeightDialog handleCloseDialogAction={handleCloseDialog} open={openAddWeightDialog} addWeightAction={handleAddWeight}/>
+            </div>
+        )
+    }
 
-    // Get the last weight (if available)
-    const lastWeight: Weight | null = weights?.length ? weights[weights.length - 1] : null;
+    const lastWeight: Weight = weights[weights.length - 1];
 
     function handleOpenDialog() {
         setOpenAddWeightDialog(true);
@@ -73,7 +79,6 @@ export default function Profile({ user }: IProfileProps) {
                 open={openAddWeightDialog}
                 addWeightAction={handleAddWeight}
                 selectedWeight={lastWeight}
-                firstWeight={firstWeight}
             />
         </div>
     );

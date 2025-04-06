@@ -21,7 +21,6 @@ interface AddWeightDialogProps {
     deleteWeightAction?: (id: string) => void;
     editMode?: boolean;
     selectedWeight?: Weight | null;
-    firstWeight?: boolean;
 }
 
 // Zod schema for validating the weight
@@ -41,7 +40,6 @@ export function AddWeightDialog({
                                     deleteWeightAction,
                                     editMode,
                                     selectedWeight,
-                                    firstWeight,
                                 }: AddWeightDialogProps) {
     const [weight, setWeight] = useState<string>(selectedWeight?.weight?.toString() || "");
     const [date, setDate] = useState(new Date());
@@ -120,7 +118,7 @@ export function AddWeightDialog({
                 <DialogHeader>
                     <DialogTitle>{editMode ? "Edit Weight" : "Add Weight"}</DialogTitle>
                     <DialogDescription>
-                        {firstWeight
+                        {selectedWeight
                             ? "Hey, looks like you didn't add any weights yet. Select a weight and press the button below to save it!"
                             : "Add your new weight, press the button below to save it!"}
                     </DialogDescription>

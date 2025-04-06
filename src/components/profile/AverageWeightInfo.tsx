@@ -1,7 +1,7 @@
 import { Weight } from "../../../types/Weight";
 
 interface AverageWeightInfoProps {
-    weights: Weight[] | undefined;
+    weights: Weight[];
 }
 
 export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
@@ -15,7 +15,7 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
         return d;
     };
 
-    const calculateWeeklyAverage = (weights: Weight[] | null) => {
+    const calculateWeeklyAverage = (weights: Weight[]) => {
         if (!weights || weights.length === 0) return { thisWeek: "0.0", lastWeek: "0.0" };
 
         // Convert string dates to Date objects
@@ -54,7 +54,7 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
         : "0.0";
 
     function handleArrow(difference: string) {
-        if (weights !== null && weights!.length >= 7) {
+        if (weights!.length >= 7) {
             if (parseFloat(difference) > 0) {
                 return <img src="/arrows/green-up.png" alt="arrow-up" className="w-4 h-4 mt-0.5"/>;
             } else {

@@ -26,7 +26,7 @@ const chartConfig = {
 
 interface GraphProps {
     name: string;
-    weights: Weight[] | undefined;
+    weights: Weight[];
 }
 
 // Function to format date as "DD/MM"
@@ -68,47 +68,6 @@ const generateSmartTicks = (min: number, max: number) => {
 };
 
 export function Graph({ name, weights }: GraphProps) {
-    if (!weights || weights.length === 0) {
-        return (
-            <Card className="bg-transparent text-white border-none">
-                <CardHeader>
-                    <CardTitle>Hello, {name}</CardTitle>
-                    <CardDescription>No data available</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                        <LineChart
-                            accessibilityLayer
-                            data={[]}
-                            margin={{
-                                top: 30,
-                                right: 12,
-                                left: 10,
-                                bottom: 0,
-                            }}
-                        >
-                            <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.2)" />
-                            <XAxis
-                                dataKey="date"
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={12}
-                                stroke="white"
-                            />
-                            <YAxis
-                                dataKey="weight"
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={25}
-                                stroke="white"
-                            />
-                        </LineChart>
-                    </ChartContainer>
-                </CardContent>
-            </Card>
-        );
-    }
-
     // Get last 7 days of weights starting from the last weight
     const lastSevenDays = weights.slice(0, 7).reverse();
 

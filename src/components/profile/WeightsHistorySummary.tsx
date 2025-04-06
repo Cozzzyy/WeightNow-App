@@ -5,7 +5,7 @@ import {AddWeightDialog} from "@/components/profile/dialogs/AddWeightDialog";
 import Link from "next/link";
 
 interface IWeightsHistorySummaryProps {
-    weights: Weight[] | undefined;
+    weights: Weight[];
     handleUpdateWeightAction?: (weight: Weight) => void;
     deleteWeightAction?: (id: string) => void;
 }
@@ -25,16 +25,6 @@ export function WeightsHistorySummary({
             setSelectedWeightIndex(index);
         }
     }, [currentPath]);
-
-    if (!weights || weights.length === 0) {
-        return (
-            <div className="flex justify-center m-10">
-                <h1 className="text-[#4B00FB] text-center">
-                    No data available, click on Add Weight to start weight tracking
-                </h1>
-            </div>
-        );
-    }
 
     const last5Weights = weights.length > 3 && currentPath === "/profile" ? weights.slice(0, 5) : weights;
 
