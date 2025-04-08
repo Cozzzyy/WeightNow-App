@@ -49,27 +49,15 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      # Step 6: Install Vercel CLI
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
-      # Step 7: Pull Vercel project settings (retrieve .vercel folder)
-      - name: Pull Vercel Project Settings
-        run: vercel pull --yes
-        env:
-          VERCEL_TOKEN: ${{ vars.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
-
-      # Step 8: Run `vercel build` to create the prebuilt output
+      # Step 6: Run `vercel build` to create the prebuilt output
       - name: Generate Prebuilt Output
         run: vercel build
 
-      # Step 9: Deploy to Vercel (only if on main branch)
+      # Step 7: Deploy to Vercel (only if on main branch)
       - name: Deploy to Vercel
         if: github.ref == 'refs/heads/main'
         run: |
-          npx vercel deploy --prod --prebuilt \
+          npx vercel deploy --prod \
             --token=$VERCEL_TOKEN \
         env:
           VERCEL_TOKEN: ${{ vars.VERCEL_TOKEN }}
