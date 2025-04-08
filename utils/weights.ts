@@ -1,6 +1,7 @@
 import { createClient } from './supabase/client';
 import {Weight} from "../types/Weight";
 import {sortWeights} from "./weightsUtil";
+import {AverageWeightWeek} from "../types/AverageWeightWeek";
 
 
 const supabase = createClient();
@@ -25,6 +26,21 @@ export const weights = {
             }))
             : [];
     },
+
+    async getAverageWeightInfo(profile_id : string): Promise<AverageWeightWeek> {
+        const { data, error } = await supabase
+            .from('weight_weekly_averages')
+            .select('*')
+            .eq('profile_id', profile_id)
+            .single();
+
+            if(error) {
+                throw error;
+            }
+
+            return data;
+    },
+
 
     async createWeight(weight: Partial<Weight>) {
         const { data, error } = await supabase

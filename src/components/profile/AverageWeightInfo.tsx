@@ -1,65 +1,36 @@
 import { Weight } from "../../../types/Weight";
+import {useAverageWeeklyWeight} from "@/hooks/useWeights";
 
 interface AverageWeightInfoProps {
-    weights: Weight[];
+    userId : string
+    weights: Weight[]
 }
 
-export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
+export function AverageWeightInfo({ userId, weights}: AverageWeightInfoProps) {
 
-    const getStartOfWeek = (date: Date, weekStartDay: number = 1): Date => {
-        const d = new Date(date);
-        const day = d.getDay();
-        const diff = (day < weekStartDay ? 7 : 0) + day - weekStartDay;
-        d.setDate(d.getDate() - diff);
-        d.setHours(0, 0, 0, 0); // Ensure the time is set to the start of the day
-        return d;
-    };
+    const {data: averageWeekWeights} = useAverageWeeklyWeight(userId);
 
-    const calculateWeeklyAverage = (weights: Weight[]) => {
-        if (!weights || weights.length === 0) return { thisWeek: "0.0", lastWeek: "0.0" };
-
-        // Convert string dates to Date objects
-        const weightEntries = weights.map(w => ({ ...w, date: new Date(w.date) })).reverse();
-
-        // Find the start of this and last week
-        const today = new Date();
-        const thisWeekStart = getStartOfWeek(today, 1); // Always start the week on Monday
-        const lastWeekStart = new Date(thisWeekStart);
-        lastWeekStart.setDate(thisWeekStart.getDate() - 7);
-
-        const thisWeekEnd = new Date(thisWeekStart);
-        thisWeekEnd.setDate(thisWeekStart.getDate() + 6); // This week's last day
-
-        // Filter weights properly into the correct week
-        const thisWeekWeights = weightEntries.filter(w => w.date >= thisWeekStart && w.date <= thisWeekEnd);
-        const lastWeekWeights = weightEntries.filter(w => w.date >= lastWeekStart && w.date < thisWeekStart);
-
-        console.log("This week weights:", thisWeekWeights);
-
-        // Calculate averages
-        const average = (data: { weight: number }[]) =>
-            data.length > 0 ? (data.reduce((acc, w) => acc + w.weight, 0) / data.length).toFixed(2) : "0.0";
-
-        return {
-            thisWeek: average(thisWeekWeights),
-            lastWeek: average(lastWeekWeights)
-        };
-    };
-
-    const { thisWeek, lastWeek } = calculateWeeklyAverage(weights!);
+    if(!averageWeekWeights){
+        return null;
+    }
 
     // Difference
-    const difference: string = thisWeek !== "0.0" && lastWeek !== "0.0"
-        ? (parseFloat(thisWeek) - parseFloat(lastWeek)).toFixed(2)
-        : "0.0";
+    const thisWeek: string = averageWeekWeights.this_week_avg == null ? "0.0" : averageWeekWeights.this_week_avg.toString();
+    const lastWeek: string = averageWeekWeights.last_week_avg == null ? "0.0" : averageWeekWeights.last_week_avg.toString();
+    const difference: string = averageWeekWeights.difference == null ? "0.0" :averageWeekWeights.difference.toString();
+
+
+
 
     function handleArrow(difference: string) {
-        if (weights!.length >= 7) {
+        if (weights.length >= 7) {
             if (parseFloat(difference) > 0) {
                 return <img src="/arrows/green-up.png" alt="arrow-up" className="w-4 h-4 mt-0.5"/>;
+
             } else {
                 return <img src="/arrows/red-down.png" alt="arrow-down" className="w-4 h-4 mt-0.5"/>;
             }
+
         }
     }
 
@@ -75,7 +46,7 @@ export function AverageWeightInfo({ weights }: AverageWeightInfoProps) {
                 </div>
                 <div className="flex flex-row gap-1">
                     {weights ? handleArrow(difference) : ""}
-                    <h1 className="font-bold">{difference !== "0.0" ? `${difference} KG` : "No data"}</h1>
+                    {weights.length >= 7 ? <h1 className="font-bold">{difference !== "0.0" ? `${difference} KG` : "No data"}</h1> : "0.0"}
                 </div>
             </div>
             <div className="flex flex-col gap-1">

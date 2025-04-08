@@ -22,6 +22,7 @@ export default function Profile({ user }: IProfileProps) {
     const { data: weights, isLoading, addWeight } = useWeights(user.id);
     const [openAddWeightDialog, setOpenAddWeightDialog] = useState(false);
 
+
     useEffect(() => {
         if (!isLoading && (!weights || weights.length === 0)) {
             setOpenAddWeightDialog(true);
@@ -71,7 +72,7 @@ export default function Profile({ user }: IProfileProps) {
         <div className="flex items-center justify-center flex-col pl-4 pr-4 overflow-hidden">
             <Graph name={user.name} weights={weights} />
             <DisplayWeight weights={weights} handleOpenDialog={handleOpenDialog} />
-            <AverageWeightInfo weights={weights} />
+            <AverageWeightInfo weights={weights} userId={user.id} />
             <WeightsHistorySummary weights={weights} />
             <AddWeightButton handleOpenDialog={handleOpenDialog} />
             <AddWeightDialog

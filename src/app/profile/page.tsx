@@ -2,7 +2,8 @@ import Profile from './Profile';
 import { NavBar } from "@/components/navigation/NavBar";
 import { ProfileType } from "../../../utils/profiles";
 import { createClient } from "../../../utils/supabase/server";
-import { redirect } from "next/navigation"; // ✅ Correct import for redirection in Server Components
+import { redirect } from "next/navigation";
+import {weights} from "../../../utils/weights"; // ✅ Correct import for redirection in Server Components
 
 export default async function ProfilePage() {
     const supabase = await createClient();
@@ -19,6 +20,7 @@ export default async function ProfilePage() {
         .single();
 
     const user = data as ProfileType;
+
 
     return (
         <div>

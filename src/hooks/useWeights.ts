@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Weight } from '../../types/Weight';
 import { weights } from "../../utils/weights";
+import {AverageWeightWeek} from "../../types/AverageWeightWeek";
 
 export function useWeights(id: string) {
     const queryClient = useQueryClient();
@@ -37,4 +38,15 @@ export function useWeights(id: string) {
         updateWeight: updateWeight.mutate,
         deleteWeight: deleteWeight.mutate,
     };
+}
+
+export function useAverageWeeklyWeight(id: string){
+    const query = useQuery<AverageWeightWeek, Error>({
+        queryKey: ['averageWeeklyWeights', id],
+        queryFn: () => weights.getAverageWeightInfo(id)
+    });
+
+    return {
+        ...query
+    }
 }
