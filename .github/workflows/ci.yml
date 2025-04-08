@@ -49,11 +49,7 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      # Step 6: Run `vercel build` to create the prebuilt output
-      - name: Generate Prebuilt Output
-        run: vercel build
-
-      # Step 7: Deploy to Vercel (only if on main branch)
+      # Step 6: Deploy to Vercel (only if on main branch)
       - name: Deploy to Vercel
         if: github.ref == 'refs/heads/main'
         run: |
