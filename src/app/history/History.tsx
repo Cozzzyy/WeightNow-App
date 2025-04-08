@@ -45,12 +45,12 @@ export function History({ user }: IHistoryProps) {
 
     return (
         <div className="flex items-center justify-center flex-col pl-4 pr-4 overflow-hidden mt-5">
-            <div className="flex items-center justify-between w-full">
+            <div className="flex flex-col w-full">
                 <div>
                     <div className="flex justify-between items-center mb-2">
                         <h1 className="text-[#4B00FB] text-[25px]">History</h1>
                         <select
-                            className="bg-transparent border h-[30] border-[#4B00FB] text-[#4B00FB] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#4B00FB]"
+                            className="bg-transparent border h-[30] border-[#4B00FB] text-[#4B00FB] pl-5 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#4B00FB]"
                             value={showType}
                             onChange={(e) => handleShowType(e.target.value)}
                         >
