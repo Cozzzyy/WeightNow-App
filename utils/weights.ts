@@ -1,6 +1,7 @@
 import { createClient } from './supabase/client';
 import {Weight} from "../types/Weight";
 import {sortWeights} from "./weightsUtil";
+import {AverageWeightWeekDifference} from "../types/AverageWeightWeekDifference";
 import {AverageWeightWeek} from "../types/AverageWeightWeek";
 
 
@@ -27,7 +28,7 @@ export const weights = {
             : [];
     },
 
-    async getAverageWeightInfo(profile_id : string): Promise<AverageWeightWeek> {
+    async getAverageWeightInfo(profile_id : string): Promise<AverageWeightWeekDifference> {
         const { data, error } = await supabase
             .from('weight_weekly_averages')
             .select('*')
@@ -39,6 +40,19 @@ export const weights = {
             }
 
             return data;
+    },
+
+    async getAverageWeightAllWeeks(profile_id : string): Promise<AverageWeightWeek[]> {
+        const { data, error } = await supabase
+            .from('weight_weekly_averages_by_week')
+            .select('*')
+            .eq('profile_id', profile_id)
+
+        if(error) {
+            throw error;
+        }
+
+        return data;
     },
 
 
