@@ -59,14 +59,15 @@ export function History({ user }: IHistoryProps) {
                             <option value="month">Month</option>
                         </select>
                     </div>
-                    <h1 className="text-[#C8B1FF] text-[15px] opacity-65 mb-2">
-                        If you want to change the date or a weight just simply click on
-                        them.
-                    </h1>
+                    {showType === "day" && (
+                        <h1 className="text-[#C8B1FF] text-[15px] opacity-65 mb-2">
+                            If you want to change the date or a weight just simply click on
+                            them.
+                        </h1>)}
                 </div>
             </div>
             {showType === "day" && (
-            <WeightsHistorySummary weights={weights} handleUpdateWeightAction={handleUpdateWeightAction} deleteWeightAction={deleteWeightAction} handleShowType={handleShowType} />
+            <WeightsHistorySummary weights={weights} handleUpdateWeightAction={handleUpdateWeightAction} deleteWeightAction={deleteWeightAction} />
             )}
             {showType === "week" && (
                 <WeekCard AvgWeightWeek={averageWeeklyWeights} />
