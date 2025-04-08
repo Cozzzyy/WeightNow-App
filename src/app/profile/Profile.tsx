@@ -6,7 +6,7 @@ import {DisplayWeight} from "@/components/profile/DisplayWeight";
 import {Weight, WeightCreate} from "../../../types/Weight";
 import {AverageWeightInfo} from "@/components/profile/AverageWeightInfo";
 import {useWeights} from "@/hooks/useWeights";
-import {Loading} from "@/components/Loading";
+import {LoadingSpinner} from "@/components/LoadingSpinner";
 import {AddWeightButton} from "@/components/buttons/AddWeightButton";
 import {AddWeightDialog} from "@/components/profile/dialogs/AddWeightDialog";
 import {useEffect, useState} from "react";
@@ -30,7 +30,7 @@ export default function Profile({ user }: IProfileProps) {
 
 
     if (isLoading) {
-        return <Loading />;
+        return <LoadingSpinner />;
     }
 
     if(!weights || weights.length === 0) {

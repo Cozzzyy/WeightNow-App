@@ -2,7 +2,7 @@
 
 import {ProfileType} from "../../../utils/profiles";
 import {useWeights} from "@/hooks/useWeights";
-import {Loading} from "@/components/Loading";
+import {LoadingSpinner} from "@/components/LoadingSpinner";
 import {WeightsHistorySummary} from "@/components/profile/WeightsHistorySummary";
 import {Weight} from "../../../types/Weight";
 import {BackButton} from "@/components/buttons/BackButton";
@@ -15,7 +15,7 @@ export function History({ user }: IHistoryProps) {
     const { data: weights, updateWeight, deleteWeight, isLoading } = useWeights(user.id);
 
     if(isLoading) {
-        return (<Loading />);
+        return (<LoadingSpinner />);
     }
 
     if(!weights || weights.length === 0) {
