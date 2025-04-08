@@ -45,9 +45,13 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
-      # Step 6: Build Next.js project
+      # Step 5: Build Next.js project
       - name: Build Next.js
         run: npm run build
+
+      # Step 6: Run `vercel build` to create the prebuilt output
+      - name: Generate Prebuilt Output
+        run: vercel build
 
       # Step 7: Deploy to Vercel (only if on main branch)
       - name: Deploy to Vercel
