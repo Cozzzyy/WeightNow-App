@@ -19,9 +19,6 @@ export function AverageWeightInfo({ userId, weights}: AverageWeightInfoProps) {
     const lastWeek: string = averageWeekWeights.last_week_avg == null ? "0.0" : averageWeekWeights.last_week_avg.toString();
     const difference: string = averageWeekWeights.difference == null ? "0.0" :averageWeekWeights.difference.toString();
 
-
-
-
     function handleArrow(difference: string) {
         if (weights.length >= 7) {
             if (parseFloat(difference) > 0) {
