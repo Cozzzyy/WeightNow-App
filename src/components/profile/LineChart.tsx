@@ -1,20 +1,27 @@
-"use client"
+"use client";
 
-import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis, ReferenceLine } from "recharts"
+import {
+    CartesianGrid,
+    Line,
+    LineChart,
+    XAxis,
+    YAxis,
+    ReferenceLine,
+} from "recharts";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
     ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Weight } from "../../../types/Weight"
+} from "@/components/ui/chart";
+import {Weight} from "../../../types/Weight";
 
 // Chart configuration
 const chartConfig = {
@@ -22,16 +29,21 @@ const chartConfig = {
         label: "Weight (kg)",
         color: "hsl(270, 100%, 50%)",
     },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 interface GraphProps {
     name: string;
     weights: Weight[];
+    targetWeight?: number;
 }
 
 // Function to format date as "DD/MM"
 const formatDate = (date: Date) => {
-    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+    return `${date.getDate().toString().padStart(2, "0")}/${(
+        date.getMonth() + 1
+    )
+        .toString()
+        .padStart(2, "0")}`;
 };
 
 // Function to generate dynamic Y-axis ticks
@@ -67,22 +79,45 @@ const generateSmartTicks = (min: number, max: number) => {
     return ticks;
 };
 
-export function Graph({ name, weights }: GraphProps) {
+export function Graph({name, weights, targetWeight}: GraphProps) {
     // Get last 7 days of weights starting from the last weight
     const lastSevenDays = weights.slice(0, 7).reverse();
 
-    const minWeight = Math.min(...lastSevenDays.map(data => data.weight));
-    const maxWeight = Math.max(...lastSevenDays.map(data => data.weight));
-    const average = lastSevenDays.reduce((acc, curr) => acc + curr.weight, 0) / lastSevenDays.length;
+    const minWeight = Math.min(...lastSevenDays.map((data) => data.weight));
+    const maxWeight = Math.max(...lastSevenDays.map((data) => data.weight));
+    const average =
+        lastSevenDays.reduce((acc, curr) => acc + curr.weight, 0) /
+        lastSevenDays.length;
 
     const yAxisTicks = generateSmartTicks(minWeight - 0.5, maxWeight + 0.5);
-    const firstDate = lastSevenDays[0] ? formatDate(new Date(lastSevenDays[0].date)) : "N/A";
-    const lastDate = lastSevenDays[lastSevenDays.length - 1] ? formatDate(new Date(lastSevenDays[lastSevenDays.length - 1].date)) : "N/A";
+    const firstDate = lastSevenDays[0]
+        ? formatDate(new Date(lastSevenDays[0].date))
+        : "N/A";
+    const lastDate = lastSevenDays[lastSevenDays.length - 1]
+        ? formatDate(new Date(lastSevenDays[lastSevenDays.length - 1].date))
+        : "N/A";
     return (
         <Card className="bg-transparent text-white border-none">
             <CardHeader>
-                <CardTitle>Hello, {name}</CardTitle>
-                <CardDescription>{firstDate} - {lastDate}</CardDescription>
+                <CardTitle>Hello, {name} - (working on phase)</CardTitle>
+                <CardDescription>
+                    <div className={"flex  justify-between "}>
+                        <div>
+                            <h1>
+                                Phase - Bulking
+                            </h1>
+                            <h1>
+                                Goal - {targetWeight} KG
+                            </h1>
+                        </div>
+                        <div>
+                            <h1>
+
+                                {firstDate} - {lastDate}
+                            </h1>
+                        </div>
+                    </div>
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="w-full h-[200px]">
@@ -90,13 +125,13 @@ export function Graph({ name, weights }: GraphProps) {
                         accessibilityLayer
                         data={lastSevenDays}
                         margin={{
-                            top: 30,
+                            top: 25,
                             right: 25,
                             left: 8,
                             bottom: 0,
                         }}
                     >
-                        <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.2)" />
+                        <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.2)"/>
                         <XAxis
                             dataKey="date"
                             tickLine={false}
@@ -117,13 +152,20 @@ export function Graph({ name, weights }: GraphProps) {
                         />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent indicator="line" />}
+                            content={<ChartTooltipContent indicator="line"/>}
                         />
                         <ReferenceLine
                             y={average}
                             strokeDasharray="5 5"
                             stroke="rgba(255,255,255,0.5)"
                         />
+                        {targetWeight !== undefined && (
+                            <ReferenceLine
+                                y={targetWeight}
+                                stroke="green"
+                                strokeDasharray="5 5"
+                            />
+                        )}
                         <Line
                             dataKey="weight"
                             type="monotone"
@@ -136,13 +178,6 @@ export function Graph({ name, weights }: GraphProps) {
                                 r: 6,
                             }}
                         >
-                            <LabelList
-                                position="top"
-                                offset={20}
-                                className="fill-white"
-                                fontSize={12}
-                                formatter={(value: number) => `${value} kg`}
-                            />
                         </Line>
                     </LineChart>
                 </ChartContainer>

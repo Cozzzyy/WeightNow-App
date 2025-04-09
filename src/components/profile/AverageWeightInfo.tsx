@@ -15,9 +15,9 @@ export function AverageWeightInfo({ userId, weights}: AverageWeightInfoProps) {
     }
 
     // Difference
-    const thisWeek: string = averageWeekWeights.this_week_avg == null ? "0.0" : averageWeekWeights.this_week_avg.toString();
-    const lastWeek: string = averageWeekWeights.last_week_avg == null ? "0.0" : averageWeekWeights.last_week_avg.toString();
-    const difference: string = averageWeekWeights.difference == null ? "0.0" :averageWeekWeights.difference.toString();
+    const thisWeek: string = averageWeekWeights.this_week_avg == null ? "0.0" : averageWeekWeights.this_week_avg.toFixed(2);
+    const lastWeek: string = averageWeekWeights.last_week_avg == null ? "0.0" : averageWeekWeights.last_week_avg.toFixed(2);
+    const difference: string = averageWeekWeights.difference == null ? "0.0" :averageWeekWeights.difference.toFixed(2);
 
     function handleArrow(difference: string) {
         if (weights.length >= 7) {
